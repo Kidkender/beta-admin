@@ -1,7 +1,11 @@
 const __ENDPOINT__ = {
   AUTH: {
     LOGIN: '/auth/login',
-    LOGOUT: '/logout',
+    LOGOUT: '/auth/logout',
+  },
+
+  POST: {
+    INDEX: '/posts',
   },
 
   CUSTOMER: {

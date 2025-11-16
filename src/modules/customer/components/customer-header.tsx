@@ -10,7 +10,7 @@ export default function CustomerHeader() {
         <h1 className='text-3xl font-bold text-foreground'>Quản lý khách hàng</h1>
         <p className='text-muted-foreground mt-1'>Quản lý thông tin khách hàng và gói bán của họ</p>
       </div>
-      <Link to={__ROUTE__.CUSTOMER.NEW}>
+      <Link to={__ROUTE__.CUSTOMER.CREATE}>
         <Button>
           <Plus className='mr-2 h-4 w-4' />
           Thêm khách hàng
