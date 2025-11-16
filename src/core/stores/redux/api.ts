@@ -13,6 +13,7 @@ const apiRTKQuery = createApi({
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': '1',
     },
     prepareHeaders: (headers) => {
       const token = localStorage.getItem(CONFIG_APP.TOKEN.ACCESS_TOKEN)

@@ -10,6 +10,8 @@ const __REDUX__ = {
     API: 'Api',
     AUTH: 'Auth',
 
+    POST: 'Post',
+
     CUSTOMER: 'Customer',
     PACKAGE: 'Package',
   },

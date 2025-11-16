@@ -35,7 +35,7 @@ export default function ContentHeader() {
         </div>
 
         <Button asChild>
-          <Link to={__ROUTE__.CONTENT.NEW}>
+          <Link to={__ROUTE__.POSTS.CREATE}>
             <Plus className='h-4 w-4 mr-2' />
             Tạo bài viết mới
           </Link>

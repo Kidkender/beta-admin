@@ -2,6 +2,9 @@ import { EnumResError } from '@core/enums/response.enum'
 
 export interface PaginationType {
   total: number
+  page: number
+  limit: number
+  totalPages: number
 }
 
 export interface ResTypeSuccess<T = unknown> {
@@ -17,4 +20,7 @@ export interface ResTypeError {
   errors: object
 }
 
-export type ResPaginationType<T> = PaginationType & ResTypeSuccess<T>
+export type ResPaginationType<T> = {
+  data: T[]
+  pagination: PaginationType
+}
