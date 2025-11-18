@@ -1,6 +1,5 @@
 import __ROUTE__ from '@constant/route.const.ts'
 import { AuthLoginPage } from '@modules/auth/pages'
-import CustomerPage, { CreateCustomerPage, DetailCustomerPage } from '@modules/customer/pages'
 import DashboardLayout from '@modules/dashboard/components/dashboard-layout.tsx'
 import DashboardPage from '@modules/dashboard/pages'
 import NotFoundPage from '@modules/not-found/pages'
@@ -12,6 +11,9 @@ import RootProvider from './provider'
 
 import './global.css'
 import '@configs/style.config.css'
+import ContactPage from '@modules/contact/pages'
+import MediaPage from '@modules/media/pages'
+import SliderPage from '@modules/slider/pages'
 
 const router = createBrowserRouter([
   // Not Defined Routes
@@ -37,12 +39,16 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: __ROUTE__.CUSTOMER.INDEX,
-        children: [
-          { index: true, Component: CustomerPage },
-          { path: __ROUTE__.CUSTOMER.CREATE, Component: CreateCustomerPage },
-          { path: __ROUTE__.CUSTOMER.DETAIL, Component: DetailCustomerPage },
-        ],
+        path: __ROUTE__.CONTACT.INDEX,
+        children: [{ index: true, Component: ContactPage }],
+      },
+      {
+        path: __ROUTE__.MEDIA.INDEX,
+        children: [{ index: true, Component: MediaPage }],
+      },
+      {
+        path: __ROUTE__.SLIDER.INDEX,
+        children: [{ index: true, Component: SliderPage }],
       },
       { path: __ROUTE__.SETTINGS, Component: SettingsPage },
     ],

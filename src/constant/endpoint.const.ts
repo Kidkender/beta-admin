@@ -8,14 +8,17 @@ const __ENDPOINT__ = {
     INDEX: '/posts',
   },
 
-  CUSTOMER: {
-    LIST: '/customers',
-    DETAIL: '/customer',
+  CONTACT: {
+    INDEX: '/contact',
   },
 
-  PACKAGE: {
-    LIST: '/packages',
-    DETAIL: '/package',
+  MEDIA: {
+    INDEX: '/media',
+    UPLOAD: '/media/upload',
+  },
+
+  SLIDER: {
+    INDEX: '/slider',
   },
 } as const
 

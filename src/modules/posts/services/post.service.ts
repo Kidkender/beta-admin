@@ -3,7 +3,7 @@ import __REDUX__ from '@constant/redux.const.ts'
 import { HttpMethodEnum } from '@core/enums/http.enum.ts'
 import { apiRTKQuery } from '@core/stores/redux/api.ts'
 import type { ResPaginationType } from '@core/types/response.type.ts'
-import type { ReqCreatePost, ReqQueryPosts } from '@modules/posts/request/post.request.ts'
+import type { ReqCreatePost, ReqQueryPosts, ReqUpdatePost } from '@modules/posts/request/post.request.ts'
 import type { ResPost } from '@modules/posts/response/post.response.ts'
 
 const postService = apiRTKQuery.injectEndpoints({
@@ -34,8 +34,17 @@ const postService = apiRTKQuery.injectEndpoints({
         body,
       }),
     }),
+
+    updatePost: builder.mutation<ResPost, ReqUpdatePost>({
+      invalidatesTags: [__REDUX__.TAG_TYPES.POST],
+      query: ({ id, ...body }) => ({
+        url: `${__ENDPOINT__.POST.INDEX}/${id}`,
+        method: HttpMethodEnum.PATCH,
+        body,
+      }),
+    }),
   }),
 })
 
 export default postService
-export const { useGetPostsQuery, useGetPostQuery, useCreatePostMutation } = postService
+export const { useGetPostsQuery, useGetPostQuery, useCreatePostMutation, useUpdatePostMutation } = postService

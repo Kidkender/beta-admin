@@ -165,7 +165,7 @@ export default function ContentPage() {
                       <TableCell className='text-foreground'>{post.viewCount}</TableCell>
                       <TableCell>
                         <div className='flex items-center justify-end gap-2'>
-                          <Link to={`${__ROUTE__.POSTS.DETAIL}/${post.id}`}>
+                          <Link to={`${__ROUTE__.POSTS.INDEX}/${post.id}`}>
                             <Button variant='ghost' size='icon' className='text-foreground'>
                               <Edit2 size={16} />
                             </Button>

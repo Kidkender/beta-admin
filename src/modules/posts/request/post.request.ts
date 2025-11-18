@@ -20,3 +20,8 @@ export const reqCreatePostSchema = z.object({
   published: z.boolean().optional(),
   files: z.array(z.file()).optional(),
 })
+
+export type ReqUpdatePost = z.infer<typeof reqUpdatePostSchema>
+export const reqUpdatePostSchema = reqCreatePostSchema.extend({
+  id: z.string(),
+})

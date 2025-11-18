@@ -11,9 +11,9 @@ const __REDUX__ = {
     AUTH: 'Auth',
 
     POST: 'Post',
-
-    CUSTOMER: 'Customer',
-    PACKAGE: 'Package',
+    CONTACT: 'Contact',
+    MEDIA: 'Media',
+    SLIDER: 'Slider',
   },
 }
 
