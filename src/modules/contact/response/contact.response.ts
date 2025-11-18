@@ -1,5 +1,5 @@
 export interface ResContact {
-  id: string // contact.id,
+  id: number // contact.id,
   name: string // contact.name,
   email: string // contact.email,
   phone: string // contact.phone,

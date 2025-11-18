@@ -43,8 +43,22 @@ const postService = apiRTKQuery.injectEndpoints({
         body,
       }),
     }),
+
+    deletePost: builder.mutation<ResPost, number>({
+      invalidatesTags: [__REDUX__.TAG_TYPES.POST],
+      query: (id) => ({
+        url: `${__ENDPOINT__.POST.INDEX}/${id}`,
+        method: HttpMethodEnum.DELETE,
+      }),
+    }),
   }),
 })
 
 export default postService
-export const { useGetPostsQuery, useGetPostQuery, useCreatePostMutation, useUpdatePostMutation } = postService
+export const {
+  useGetPostsQuery,
+  useGetPostQuery,
+  useCreatePostMutation,
+  useUpdatePostMutation,
+  useDeletePostMutation,
+} = postService

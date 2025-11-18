@@ -3,13 +3,13 @@ import __REDUX__ from '@constant/redux.const.ts'
 import { HttpMethodEnum } from '@core/enums/http.enum.ts'
 import { apiRTKQuery } from '@core/stores/redux/api.ts'
 import type { ResPaginationType } from '@core/types/response.type.ts'
-import type { ReqCreateSlider, ReqQuerySliders, ReqUpdateSlider } from '@modules/slider/request/slider.request.ts'
+import type { ReqCreateSlider, ReqQuerySlider, ReqUpdateSlider } from '@modules/slider/request/slider.request.ts'
 import type { ResSlider } from '@modules/slider/response/slider.response.ts'
 
 const sliderService = apiRTKQuery.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
-    getSliders: builder.query<ResPaginationType<ResSlider>, ReqQuerySliders>({
+    getSliders: builder.query<ResPaginationType<ResSlider>, ReqQuerySlider>({
       providesTags: [__REDUX__.TAG_TYPES.SLIDER],
       query: (params) => ({
         url: __ENDPOINT__.SLIDER.INDEX,
@@ -43,8 +43,22 @@ const sliderService = apiRTKQuery.injectEndpoints({
         body,
       }),
     }),
+
+    deleteSlider: builder.mutation<ResSlider, number>({
+      invalidatesTags: [__REDUX__.TAG_TYPES.SLIDER],
+      query: (id) => ({
+        url: `${__ENDPOINT__.SLIDER.INDEX}/${id}`,
+        method: HttpMethodEnum.DELETE,
+      }),
+    }),
   }),
 })
 
 export default sliderService
-export const { useGetSlidersQuery, useGetSliderQuery, useCreateSliderMutation, useUpdateSliderMutation } = sliderService
+export const {
+  useGetSlidersQuery,
+  useGetSliderQuery,
+  useCreateSliderMutation,
+  useUpdateSliderMutation,
+  useDeleteSliderMutation,
+} = sliderService

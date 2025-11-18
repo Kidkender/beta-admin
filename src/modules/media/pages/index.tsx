@@ -1,12 +1,22 @@
+import { showToastSuccess } from '@core/components/toast.core.tsx'
+import MediaUpload from '@modules/media/components/media-upload.tsx'
 import type { ReqQueryMedias } from '@modules/media/request/media.request.ts'
 import type { ResMedia } from '@modules/media/response/media.response.ts'
-import { useGetMediasQuery } from '@modules/media/services/media.service.ts'
+import { useDeleteMediaMutation, useGetMediasQuery } from '@modules/media/services/media.service.ts'
 import { Button } from '@shared/components/ui/button.tsx'
 import { Card } from '@shared/components/ui/card.tsx'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@shared/components/ui/pagination.tsx'
 import { Spinner } from '@shared/components/ui/spinner.tsx'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/components/ui/table'
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@shared/components/ui/table'
 import _ from 'lodash'
-import { Plus, Search, Trash2 } from 'lucide-react'
+import { Search, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 export default function MediaPage() {
@@ -15,17 +25,39 @@ export default function MediaPage() {
     limit: 10,
   })
 
-  const { medias, isFetching } = useGetMediasQuery(params, {
+  const { paginationValue, medias, isFetching } = useGetMediasQuery(params, {
     selectFromResult: (props) => {
       const { data } = props
       const medias = _.get(data, 'data', [] as ResMedia[]).map((post) => ({
         ...post,
         createdAt: new Date(post.createdAt).toLocaleDateString(),
       }))
+      const paginationValue = _.get(data, 'pagination')
 
-      return { ...props, medias }
+      return { ...props, medias, paginationValue }
     },
   })
+
+  const currentPage = paginationValue?.page ?? params.page ?? 1
+  const totalPages = paginationValue?.totalPages ?? 1
+
+  const handleChangePage = (page: number) => {
+    if (page < 1 || page > totalPages || page === currentPage) return
+
+    setParams((prev) => ({
+      ...prev,
+      page,
+    }))
+  }
+
+  const [onDeleteMedia, { isLoading }] = useDeleteMediaMutation()
+  const handleDeleteMedia = (media: ResMedia) => {
+    onDeleteMedia(media.id)
+      .unwrap()
+      .finally(() => {
+        showToastSuccess(`Xoá thành ${media.fileName}`)
+      })
+  }
 
   return (
     <main className='flex-1 overflow-y-auto p-6'>
@@ -35,10 +67,7 @@ export default function MediaPage() {
             <h1 className='text-3xl font-bold text-foreground'>Quản lý hình ảnh</h1>
             <p className='text-muted-foreground'>Quản lý hình ảnh</p>
           </div>
-          <Button className='bg-primary hover:bg-primary/90 text-primary-foreground gap-2'>
-            <Plus size={20} />
-            Thêm hình ảnh
-          </Button>
+          <MediaUpload />
         </div>
 
         <Card className='bg-card border border-border p-4'>
@@ -82,13 +111,19 @@ export default function MediaPage() {
                     <TableRow key={media.id}>
                       <TableCell className='text-foreground font-medium'>{media.fileName}</TableCell>
                       <TableCell className=''>
-                        <img src={media.url} alt={media.alt} className='w-20 h-20 object-cover rounded-md' />
+                        <img src={media.url} alt={media.alt} className='w-10 h-10 object-cover rounded-md' />
                       </TableCell>
                       <TableCell className='text-muted-foreground'>{media.fileSize}</TableCell>
                       <TableCell className='text-foreground'>{media.type}</TableCell>
                       <TableCell>
                         <div className='flex items-center justify-end gap-2'>
-                          <Button variant='ghost' size='icon' className='text-destructive'>
+                          <Button
+                            variant='ghost'
+                            size='icon'
+                            className='text-destructive'
+                            onClick={() => handleDeleteMedia({ ...media, createdAt: new Date(media.createdAt) })}
+                            disabled={isLoading}
+                          >
                             <Trash2 size={16} />
                           </Button>
                         </div>
@@ -97,6 +132,56 @@ export default function MediaPage() {
                   ))
                 )}
               </TableBody>
+              <TableFooter className={'w-full'}>
+                {paginationValue && totalPages > 1 && (
+                  <Pagination className={'w-full bg-white pt-4'}>
+                    <PaginationContent className={'w-full'}>
+                      {/* Previous */}
+                      <PaginationItem>
+                        <PaginationPrevious
+                          href='#'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleChangePage(currentPage - 1)
+                          }}
+                          className={currentPage === 1 ? 'pointer-events-none opacity-50' : undefined}
+                        />
+                      </PaginationItem>
+
+                      {/* Các số trang */}
+                      {Array.from({ length: totalPages }).map((_, index) => {
+                        const pageNumber = index + 1
+                        return (
+                          <PaginationItem key={pageNumber}>
+                            <PaginationLink
+                              href='#'
+                              onClick={(e) => {
+                                e.preventDefault()
+                                handleChangePage(pageNumber)
+                              }}
+                              isActive={pageNumber === currentPage}
+                            >
+                              {pageNumber}
+                            </PaginationLink>
+                          </PaginationItem>
+                        )
+                      })}
+
+                      {/* Next */}
+                      <PaginationItem>
+                        <PaginationNext
+                          href='#'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleChangePage(currentPage + 1)
+                          }}
+                          className={currentPage === totalPages ? 'pointer-events-none opacity-50' : undefined}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                )}
+              </TableFooter>
             </Table>
           </div>
         </Card>

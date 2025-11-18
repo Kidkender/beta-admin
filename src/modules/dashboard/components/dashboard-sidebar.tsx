@@ -11,7 +11,7 @@ const navigation = [
   { name: 'Hình Ảnh', href: __ROUTE__.MEDIA.INDEX, icon: ImagePlayIcon },
   { name: 'Banner', href: __ROUTE__.SLIDER.INDEX, icon: SlidersHorizontal },
   { name: 'Liên Hệ', href: __ROUTE__.CONTACT.INDEX, icon: Phone },
-  { name: 'Cài Đặt', href: __ROUTE__.SETTINGS, icon: Settings },
+  { name: 'Thông tin công ty', href: __ROUTE__.COMPANY_INFO.INDEX, icon: Settings },
 ]
 
 export default function DashboardSidebar() {

@@ -13,6 +13,7 @@ export const reqQueryContactSchema = schemaBaseQuery.extend({
 export type ReqCreateContact = z.infer<typeof reqCreateContactSchema>
 export const reqCreateContactSchema = z.object({
   name: z.string().min(1, { message: 'Vui lòng nhập tiêu đề' }),
+  status: z.string().optional(),
   email: z.email().min(1, { message: 'Vui lòng nhập email' }),
   phone: z.string().optional(),
   subject: z.string(),

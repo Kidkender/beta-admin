@@ -1,38 +1,51 @@
+import { useGetSlidersQuery } from '@modules/slider/services/slider.service.ts'
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/components/ui/card'
+import _ from 'lodash'
 import { DollarSign, FileText, TrendingUp, Users } from 'lucide-react'
 
-const stats = [
-  {
-    title: 'Tổng người dùng',
-    value: '2,847',
-    change: '+12%',
-    icon: Users,
-    color: 'text-blue-600',
-  },
-  {
-    title: 'Bài viết',
-    value: '1,234',
-    change: '+8%',
-    icon: FileText,
-    color: 'text-green-600',
-  },
-  {
-    title: 'Liên hệ',
-    value: '856',
-    change: '+23%',
-    icon: TrendingUp,
-    color: 'text-purple-600',
-  },
-  {
-    title: 'Lượt truy cập',
-    value: '45,231',
-    change: '+15%',
-    icon: DollarSign,
-    color: 'text-orange-600',
-  },
-]
-
 export default function DashboardStats() {
+  const { totalSlider } = useGetSlidersQuery(
+    { page: 1, limit: 1 },
+    {
+      selectFromResult: (props) => {
+        const totalSlider = _.get(props.data, 'pagination.total', 0)
+
+        return { ...props, totalSlider }
+      },
+    },
+  )
+
+  const stats = [
+    {
+      title: 'Tổng người dùng',
+      value: '2,847',
+      change: '+12%',
+      icon: Users,
+      color: 'text-blue-600',
+    },
+    {
+      title: 'Bài viết',
+      value: totalSlider,
+      change: '+8%',
+      icon: FileText,
+      color: 'text-green-600',
+    },
+    {
+      title: 'Liên hệ',
+      value: '856',
+      change: '+23%',
+      icon: TrendingUp,
+      color: 'text-purple-600',
+    },
+    {
+      title: 'Lượt truy cập',
+      value: '45,231',
+      change: '+15%',
+      icon: DollarSign,
+      color: 'text-orange-600',
+    },
+  ]
+
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
       {stats.map((stat) => (

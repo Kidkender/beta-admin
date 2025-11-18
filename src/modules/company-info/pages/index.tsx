@@ -1,9 +1,12 @@
 import __ROUTE__ from '@constant/route.const.ts'
 import { showToastSuccess } from '@core/components/toast.core.tsx'
-import ContentEditor from '@modules/posts/components/content-editor.tsx'
-import type { ReqQueryPosts } from '@modules/posts/request/post.request.ts'
-import type { ResPost } from '@modules/posts/response/post.response.ts'
-import { useDeletePostMutation, useGetPostsQuery } from '@modules/posts/services/post.service.ts'
+import CompanyInfoForm from '@modules/company-info/components/company-info-form.tsx'
+import type { ReqQueryCompanyInfo } from '@modules/company-info/request/company-info.request.ts'
+import type { ResCompanyInfo } from '@modules/company-info/response/company-info.response.ts'
+import {
+  useDeleteCompanyInfoMutation,
+  useGetCompanyInfosQuery,
+} from '@modules/company-info/services/company-info.service.ts'
 import { Button } from '@shared/components/ui/button.tsx'
 import { Card } from '@shared/components/ui/card.tsx'
 import {
@@ -31,32 +34,30 @@ import { Edit2, Plus, Search, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 
-export default function ContentPage() {
-  const [params, setParams] = useState<ReqQueryPosts>({
+export default function CompanyInfoPage() {
+  const [params, setParams] = useState<ReqQueryCompanyInfo>({
     page: 1,
     limit: 10,
   })
 
-  const { paginationValue, posts, isFetching } = useGetPostsQuery(params, {
+  const { paginationValue, companyInfos, isFetching } = useGetCompanyInfosQuery(params, {
     selectFromResult: (props) => {
       const { data } = props
-      const posts = _.get(data, 'data', [] as ResPost[]).map((post) => ({
-        ...post,
-        createdAt: new Date(post.createdAt).toLocaleDateString(),
+      const companyInfos = _.get(data, 'data', [] as ResCompanyInfo[]).map((companyInfo) => ({
+        ...companyInfo,
+        createdAt: new Date(companyInfo.createdAt).toLocaleDateString(),
       }))
       const paginationValue = _.get(data, 'pagination')
 
-      return { ...props, posts, paginationValue }
+      return { ...props, companyInfos, paginationValue }
     },
   })
 
-  const [onDeletePost] = useDeletePostMutation()
-  const handleDeletePost = (post: ResPost) => {
-    onDeletePost(post.id)
+  const [onDeleteCompanyInfo] = useDeleteCompanyInfoMutation()
+  const handleDeleteCompanyInfo = (companyInfo: ResCompanyInfo) => {
+    onDeleteCompanyInfo(companyInfo.id)
       .unwrap()
-      .finally(() => {
-        showToastSuccess(`Xoá thành ${post.title}`)
-      })
+      .finally(() => showToastSuccess(`Xoá thành ${companyInfo.title}`))
   }
 
   const currentPage = paginationValue?.page ?? params.page ?? 1
@@ -76,13 +77,13 @@ export default function ContentPage() {
       <div className='space-y-6'>
         <div className='flex items-center justify-between'>
           <div>
-            <h1 className='text-3xl font-bold text-foreground'>Quản lý bài viết</h1>
-            <p className='text-muted-foreground'>Quản lý tin tức, nghiên cứu, nhân sự, minh chứng</p>
+            <h1 className='text-3xl font-bold text-foreground'>Quản lý thông tin công ty</h1>
+            <p className='text-muted-foreground'>Quản lý các thông tin liên quan đến công ty</p>
           </div>
-          <Link to={__ROUTE__.POSTS.CREATE}>
+          <Link to={__ROUTE__.COMPANY_INFO.CREATE}>
             <Button className='bg-primary hover:bg-primary/90 text-primary-foreground gap-2'>
               <Plus size={20} />
-              Thêm bài viết
+              Thêm thông tin
             </Button>
           </Link>
         </div>
@@ -94,37 +95,16 @@ export default function ContentPage() {
               <Search className='absolute left-3 top-3 text-muted-foreground' size={18} />
               <input
                 type='text'
-                placeholder='Tìm kiếm bài viết...'
+                placeholder='Tìm kiếm thông tin...'
                 value={params.search}
                 onChange={(e) => setParams((pre) => ({ ...pre, search: e.target.value }))}
                 className='w-full pl-10 pr-4 py-2 rounded-lg bg-input border border-border text-foreground placeholder:text-muted-foreground'
               />
             </div>
 
-            {/* Hàng 2: Filters và Sort */}
-            {/* Filter Danh mục */}
             <Select
-              onValueChange={(value) => setParams((pre) => ({ ...pre, category: value }))}
-              value={params.category}
-            >
-              <SelectTrigger className='basis-1/8' size={'lg'}>
-                <SelectValue placeholder='Danh mục' />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Danh Mục</SelectLabel>
-                  <SelectItem value='TIN_TUC'>Tin Tức</SelectItem>
-                  <SelectItem value='NGHIEN_CUU'>Nghiên Cứu</SelectItem>
-                  <SelectItem value='NHAN_SU'>Nhân Sự</SelectItem>
-                  <SelectItem value='MINH_CHUNG'>Minh Chứng</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-
-            {/* Filter Trạng thái */}
-            <Select
-              onValueChange={(value) => setParams((pre) => ({ ...pre, published: value === 'true' }))}
-              value={params.category}
+              onValueChange={(value) => setParams((pre) => ({ ...pre, isActive: value === 'true' }))}
+              value={`${params.isActive}`}
             >
               <SelectTrigger className='basis-1/8' size={'lg'}>
                 <SelectValue placeholder='Trạng thái' />
@@ -132,12 +112,13 @@ export default function ContentPage() {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Trạng thái</SelectLabel>
-                  <SelectItem value={'true'}>Đã xuất bản</SelectItem>
-                  <SelectItem value={'false'}>Chưa xuất bản</SelectItem>
+                  <SelectItem value={'true'}>Đã kích hoạt</SelectItem>
+                  <SelectItem value={'false'}>Chưa kích hoạt</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
 
+            {/* Hàng 2: Filters và Sort */}
             {/* Sort theo ngày */}
             <Select
               onValueChange={(value) => setParams((pre) => ({ ...pre, sortOrder: value as 'asc' | 'desc' }))}
@@ -160,45 +141,46 @@ export default function ContentPage() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Sắp xếp</TableHead>
                   <TableHead>Tiêu đề</TableHead>
+                  <TableHead>Nội dung</TableHead>
                   <TableHead>Trạng thái</TableHead>
-                  <TableHead>Ngày</TableHead>
-                  <TableHead>Lượt xem</TableHead>
-                  <TableHead>Hành động</TableHead>
+                  <TableHead>Ngày tạo</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isFetching ? (
                   <TableRow>
-                    <TableCell colSpan={6} className='text-center'>
+                    <TableCell colSpan={5} className='text-center'>
                       <Spinner />
                     </TableCell>
                   </TableRow>
-                ) : posts.length === 0 ? (
+                ) : companyInfos.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className='text-center'>
+                    <TableCell colSpan={5} className='text-center'>
                       Không có dữ liệu
                     </TableCell>
                   </TableRow>
                 ) : (
-                  posts.map((post) => (
-                    <TableRow key={post.id}>
-                      <TableCell className='text-foreground font-medium'>{post.title}</TableCell>
+                  companyInfos.map((companyInfo) => (
+                    <TableRow key={companyInfo.id}>
+                      <TableCell className='text-foreground font-medium'>{companyInfo.order}</TableCell>
+                      <TableCell className='text-foreground font-medium'>{companyInfo.title}</TableCell>
+                      <TableCell className='text-foreground font-medium'>{companyInfo.content}</TableCell>
                       <TableCell className=''>
                         <span
                           className={cn(
                             'px-3 py-1 rounded-full text-xs font-medium',
-                            post ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground',
+                            companyInfo.isActive ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground',
                           )}
                         >
-                          {post ? 'Xuất bản' : 'Bản nháp'}
+                          {companyInfo.isActive ? 'Đã kích hoạt' : 'Chưa kích hoạt'}
                         </span>
                       </TableCell>
-                      <TableCell className='text-muted-foreground'>{post.createdAt}</TableCell>
-                      <TableCell className='text-foreground'>{post.viewCount}</TableCell>
+                      <TableCell className='text-muted-foreground'>{companyInfo.createdAt}</TableCell>
                       <TableCell>
                         <div className='flex items-center justify-end gap-2'>
-                          <Link to={`${__ROUTE__.POSTS.INDEX}/${post.id}`}>
+                          <Link to={`${__ROUTE__.COMPANY_INFO.INDEX}/${companyInfo.id}`}>
                             <Button variant='ghost' size='icon' className='text-foreground'>
                               <Edit2 size={16} />
                             </Button>
@@ -207,7 +189,7 @@ export default function ContentPage() {
                             variant='ghost'
                             size='icon'
                             className='text-destructive'
-                            onClick={() => handleDeletePost(post)}
+                            onClick={() => handleDeleteCompanyInfo(companyInfo)}
                           >
                             <Trash2 size={16} />
                           </Button>
@@ -275,23 +257,23 @@ export default function ContentPage() {
   )
 }
 
-export function CreateContentPage() {
+export function CreateCompanyInfoPage() {
   return (
     <main className='flex-1 overflow-y-auto p-6'>
       <div className='max-w-7xl mx-auto'>
-        <ContentEditor />
+        <CompanyInfoForm />
       </div>
     </main>
   )
 }
 
-export function DetailContentPage() {
+export function DetailCompanyInfoPage() {
   const { id } = useParams()
 
   return (
     <main className='flex-1 overflow-y-auto p-6'>
       <div className='max-w-4xl mx-auto'>
-        <ContentEditor postId={id} />
+        <CompanyInfoForm companyInfoId={id} />
       </div>
     </main>
   )

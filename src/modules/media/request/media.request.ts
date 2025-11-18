@@ -7,3 +7,6 @@ export const reqQueryMediasSchema = schemaBaseQuery.extend({
   uploadedBy: z.number().optional(),
   search: z.string().optional(),
 })
+
+export type ReqUploadMultipleMedia = z.infer<typeof reqUploadMultipleMediaSchema>
+export const reqUploadMultipleMediaSchema = z.object({ files: z.array(z.file()) })

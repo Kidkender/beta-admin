@@ -1,25 +1,73 @@
+import { useGetContactsQuery } from '@modules/contact/services/contact.service.ts'
+import { useGetMediasQuery } from '@modules/media/services/media.service.ts'
+import { useGetPostsQuery } from '@modules/posts/services/post.service.ts'
+import { useGetSlidersQuery } from '@modules/slider/services/slider.service.ts'
 import { Card } from '@shared/components/ui/card.tsx'
+import _ from 'lodash'
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-const chartData = [
-  { name: 'Thứ 2', articles: 12, media: 8, visitors: 240 },
-  { name: 'Thứ 3', articles: 19, media: 12, visitors: 221 },
-  { name: 'Thứ 4', articles: 15, media: 10, visitors: 229 },
-  { name: 'Thứ 5', articles: 25, media: 18, visitors: 200 },
-  { name: 'Thứ 6', articles: 22, media: 15, visitors: 250 },
-  { name: 'Thứ 7', articles: 18, media: 14, visitors: 210 },
-]
-
-const pieData = [
-  { name: 'Tin tức', value: 35 },
-  { name: 'Nghiên cứu', value: 25 },
-  { name: 'Nhân sự', value: 20 },
-  { name: 'Minh chứng', value: 20 },
-]
-
-const COLORS = ['#6666ff', '#8884d8', '#82ca9d', '#ffc658']
-
 export default function DashboardPage() {
+  const { totalSlider } = useGetSlidersQuery(
+    { page: 1, limit: 1, isActive: true },
+    {
+      selectFromResult: (props) => {
+        const totalSlider = _.get(props.data, 'pagination.total', 0)
+
+        return { ...props, totalSlider }
+      },
+    },
+  )
+
+  const { totalPost } = useGetPostsQuery(
+    { page: 1, limit: 1, published: true },
+    {
+      selectFromResult: (props) => {
+        const totalPost = _.get(props.data, 'pagination.total', 0)
+
+        return { ...props, totalPost }
+      },
+    },
+  )
+
+  const { totalMedia } = useGetMediasQuery(
+    { page: 1, limit: 1 },
+    {
+      selectFromResult: (props) => {
+        const totalMedia = _.get(props.data, 'pagination.total', 0)
+
+        return { ...props, totalMedia }
+      },
+    },
+  )
+
+  const { totalContact } = useGetContactsQuery(
+    { page: 1, limit: 1 },
+    {
+      selectFromResult: (props) => {
+        const totalContact = _.get(props.data, 'pagination.total', 0)
+
+        return { ...props, totalContact }
+      },
+    },
+  )
+
+  const chartData = [
+    { name: 'Thứ 2', articles: 12, media: 8, visitors: 240 },
+    { name: 'Thứ 3', articles: 19, media: 12, visitors: 221 },
+    { name: 'Thứ 4', articles: 15, media: 10, visitors: 229 },
+    { name: 'Thứ 5', articles: 25, media: 18, visitors: 200 },
+    { name: 'Thứ 6', articles: 22, media: 15, visitors: 250 },
+    { name: 'Thứ 7', articles: 18, media: 14, visitors: 210 },
+  ]
+
+  const pieData = [
+    { name: 'Tin tức', value: 35 },
+    { name: 'Nghiên cứu', value: 25 },
+    { name: 'Nhân sự', value: 20 },
+    { name: 'Minh chứng', value: 20 },
+  ]
+
+  const COLORS = ['#6666ff', '#8884d8', '#82ca9d', '#ffc658']
   return (
     <main className='flex-1 overflow-y-auto p-6'>
       <div className='space-y-6'>
@@ -32,7 +80,7 @@ export default function DashboardPage() {
           <Card className='p-6 bg-card border border-border'>
             <div className='space-y-2'>
               <p className='text-sm font-medium text-muted-foreground'>Tổng bài viết</p>
-              <p className='text-3xl font-bold text-foreground'>127</p>
+              <p className='text-3xl font-bold text-foreground'>{totalPost}</p>
               <p className='text-xs text-muted-foreground'>+12 tuần này</p>
             </div>
           </Card>
@@ -40,7 +88,7 @@ export default function DashboardPage() {
           <Card className='p-6 bg-card border border-border'>
             <div className='space-y-2'>
               <p className='text-sm font-medium text-muted-foreground'>Media</p>
-              <p className='text-3xl font-bold text-foreground'>456</p>
+              <p className='text-3xl font-bold text-foreground'>{totalMedia}</p>
               <p className='text-xs text-muted-foreground'>+45 tuần này</p>
             </div>
           </Card>
@@ -48,7 +96,7 @@ export default function DashboardPage() {
           <Card className='p-6 bg-card border border-border'>
             <div className='space-y-2'>
               <p className='text-sm font-medium text-muted-foreground'>Slider/Banner</p>
-              <p className='text-3xl font-bold text-foreground'>8</p>
+              <p className='text-3xl font-bold text-foreground'>{totalSlider}</p>
               <p className='text-xs text-muted-foreground'>+2 tuần này</p>
             </div>
           </Card>
@@ -56,7 +104,7 @@ export default function DashboardPage() {
           <Card className='p-6 bg-card border border-border'>
             <div className='space-y-2'>
               <p className='text-sm font-medium text-muted-foreground'>Liên hệ</p>
-              <p className='text-3xl font-bold text-foreground'>34</p>
+              <p className='text-3xl font-bold text-foreground'>{totalContact}</p>
               <p className='text-xs text-muted-foreground'>+8 tuần này</p>
             </div>
           </Card>
