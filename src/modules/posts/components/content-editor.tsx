@@ -12,7 +12,7 @@ import {
 } from '@shared/components/ui/select'
 import { Switch } from '@shared/components/ui/switch.tsx'
 import { Textarea } from '@shared/components/ui/textarea'
-import { ArrowLeft, Eye, Save } from 'lucide-react'
+import { ArrowLeft, Save } from 'lucide-react'
 import QuillResizeImage from 'quill-resize-image'
 import ReactQuill, { Quill } from 'react-quill-new'
 import { Link, useNavigate } from 'react-router'
@@ -20,7 +20,7 @@ import 'react-quill-new/dist/quill.snow.css'
 import { showToastError } from '@core/components/toast.core.tsx'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { type ReqCreatePost, reqCreatePostSchema } from '@modules/posts/request/post.request.ts'
-import { useCreatePostMutation, useGetPostQuery } from '@modules/posts/services/post.service.ts'
+import { useCreatePostMutation, useGetPostQuery, useUpdatePostMutation } from '@modules/posts/services/post.service.ts'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@shared/components/ui/form.tsx'
 import { useLayoutEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -55,12 +55,20 @@ export default function ContentEditor({ postId }: ContentEditorProps) {
   })
 
   const [createPost] = useCreatePostMutation()
+  const [updatePost] = useUpdatePostMutation()
 
   const onSubmit = (formData: ReqCreatePost) => {
-    createPost(formData)
-      .unwrap()
-      .then(() => navigate(__ROUTE__.POSTS.INDEX))
-      .catch(showToastError)
+    if (isEditing) {
+      updatePost({ id: postId, ...formData })
+        .unwrap()
+        .then(() => navigate(__ROUTE__.POSTS.INDEX))
+        .catch(showToastError)
+    } else {
+      createPost(formData)
+        .unwrap()
+        .then(() => navigate(__ROUTE__.POSTS.INDEX))
+        .catch(showToastError)
+    }
   }
 
   useLayoutEffect(() => {
@@ -89,10 +97,6 @@ export default function ContentEditor({ postId }: ContentEditorProps) {
         </div>
 
         <div className='flex gap-2'>
-          <Button variant='outline'>
-            <Eye className='h-4 w-4 mr-2' />
-            Xem trước
-          </Button>
           <Button
             onClick={form.handleSubmit(onSubmit)}
             disabled={form.formState.isSubmitting || !form.formState.isValid}

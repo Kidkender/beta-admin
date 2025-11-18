@@ -1,15 +1,17 @@
 import __ROUTE__ from '@constant/route.const.ts'
 import { Button } from '@shared/components/ui/button'
 import { cn } from '@shared/lib/utils'
-import { FileText, LayoutDashboard, Menu, Settings, Users, X } from 'lucide-react'
+import { FileText, ImagePlayIcon, LayoutDashboard, Menu, Phone, Settings, SlidersHorizontal, X } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router'
 
 const navigation = [
   { name: 'Dashboard', href: __ROUTE__.DASHBOARD, icon: LayoutDashboard },
-  { name: 'Tin Tức', href: __ROUTE__.POSTS.INDEX, icon: FileText },
-  { name: 'Người liên hệ', href: __ROUTE__.CUSTOMER.INDEX, icon: Users },
-  { name: 'Cài đặt', href: __ROUTE__.SETTINGS, icon: Settings },
+  { name: 'Bài Viết', href: __ROUTE__.POSTS.INDEX, icon: FileText },
+  { name: 'Hình Ảnh', href: __ROUTE__.MEDIA.INDEX, icon: ImagePlayIcon },
+  { name: 'Banner', href: __ROUTE__.SLIDER.INDEX, icon: SlidersHorizontal },
+  { name: 'Liên Hệ', href: __ROUTE__.CONTACT.INDEX, icon: Phone },
+  { name: 'Cài Đặt', href: __ROUTE__.SETTINGS, icon: Settings },
 ]
 
 export default function DashboardSidebar() {

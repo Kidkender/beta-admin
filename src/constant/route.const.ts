@@ -9,28 +9,22 @@ const __ROUTE__ = {
     DETAIL: '/posts/:id',
   },
 
-  TRADING: {
-    INDEX: '/trading',
-    REPORTS: '/trading/reports',
-    TRANSACTIONS: '/trading/transactions',
+  SLIDER: {
+    INDEX: '/slider',
+    CREATE: '/slider/create',
+    DETAIL: '/slider/:id',
   },
 
-  CUSTOMER: {
-    INDEX: '/customer',
-    CREATE: '/customer/create',
-    DETAIL: '/customer/:id',
-  },
-
-  USER: {
+  MEDIA: {
     INDEX: '/user',
     CREATE: '/user/create',
     DETAIL: '/user/:id',
   },
 
-  PACKAGE: {
-    INDEX: '/package',
-    CREATE: '/package/create',
-    DETAIL: '/package/:id',
+  CONTACT: {
+    INDEX: '/contact',
+    CREATE: '/contact/create',
+    DETAIL: '/contact/:id',
   },
 
   SETTINGS: '/settings',
