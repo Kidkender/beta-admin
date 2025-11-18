@@ -5,6 +5,7 @@ import { apiRTKQuery } from '@core/stores/redux/api.ts'
 import type { ResPaginationType } from '@core/types/response.type.ts'
 import type { ReqCreateContact, ReqQueryContact, ReqUpdateContact } from '@modules/contact/request/contact.request.ts'
 import type { ResContact } from '@modules/contact/response/contact.response.ts'
+import type { ResPost } from '@modules/posts/response/post.response.ts'
 
 const contactService = apiRTKQuery.injectEndpoints({
   overrideExisting: true,
@@ -43,9 +44,22 @@ const contactService = apiRTKQuery.injectEndpoints({
         body,
       }),
     }),
+
+    deleteContact: builder.mutation<ResPost, number>({
+      invalidatesTags: [__REDUX__.TAG_TYPES.CONTACT],
+      query: (id) => ({
+        url: `${__ENDPOINT__.CONTACT.INDEX}/${id}`,
+        method: HttpMethodEnum.DELETE,
+      }),
+    }),
   }),
 })
 
 export default contactService
-export const { useGetContactsQuery, useGetContactQuery, useCreateContactMutation, useUpdateContactMutation } =
-  contactService
+export const {
+  useGetContactsQuery,
+  useGetContactQuery,
+  useCreateContactMutation,
+  useUpdateContactMutation,
+  useDeleteContactMutation,
+} = contactService

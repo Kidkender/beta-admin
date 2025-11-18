@@ -26,20 +26,19 @@ const mediaService = apiRTKQuery.injectEndpoints({
       }),
     }),
 
-    createMedia: builder.mutation<ResMedia, FormData>({
+    deleteMedia: builder.mutation<ResMedia, number>({
       invalidatesTags: [__REDUX__.TAG_TYPES.MEDIA],
-      query: (body) => ({
-        url: __ENDPOINT__.MEDIA.UPLOAD,
-        method: HttpMethodEnum.POST,
-        body,
+      query: (id) => ({
+        url: `${__ENDPOINT__.MEDIA.INDEX}/${id}`,
+        method: HttpMethodEnum.DELETE,
       }),
     }),
 
-    updateMedia: builder.mutation<ResMedia, FormData>({
+    uploadMultiMedia: builder.mutation<ResMedia, FormData>({
       invalidatesTags: [__REDUX__.TAG_TYPES.MEDIA],
       query: (body) => ({
-        url: __ENDPOINT__.MEDIA.INDEX,
-        method: HttpMethodEnum.PATCH,
+        url: __ENDPOINT__.MEDIA.UPLOAD_MULTI,
+        method: HttpMethodEnum.POST,
         body,
       }),
     }),
@@ -47,4 +46,4 @@ const mediaService = apiRTKQuery.injectEndpoints({
 })
 
 export default mediaService
-export const { useGetMediasQuery, useGetMediaQuery, useCreateMediaMutation, useUpdateMediaMutation } = mediaService
+export const { useGetMediasQuery, useGetMediaQuery, useDeleteMediaMutation, useUploadMultiMediaMutation } = mediaService

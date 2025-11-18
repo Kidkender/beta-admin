@@ -1,19 +1,19 @@
 import __ROUTE__ from '@constant/route.const.ts'
 import { AuthLoginPage } from '@modules/auth/pages'
+import CompanyInfoPage, { CreateCompanyInfoPage, DetailCompanyInfoPage } from '@modules/company-info/pages'
+import ContactPage, { CreateContactPage, DetailContactPage } from '@modules/contact/pages'
 import DashboardLayout from '@modules/dashboard/components/dashboard-layout.tsx'
 import DashboardPage from '@modules/dashboard/pages'
+import MediaPage from '@modules/media/pages'
 import NotFoundPage from '@modules/not-found/pages'
 import ContentPage, { CreateContentPage, DetailContentPage } from '@modules/posts/pages'
-import SettingsPage from '@modules/settings/pages'
+import SliderPage, { CreateSliderPage, DetailSliderPage } from '@modules/slider/pages'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import RootProvider from './provider'
 
 import './global.css'
 import '@configs/style.config.css'
-import ContactPage from '@modules/contact/pages'
-import MediaPage from '@modules/media/pages'
-import SliderPage from '@modules/slider/pages'
 
 const router = createBrowserRouter([
   // Not Defined Routes
@@ -40,7 +40,11 @@ const router = createBrowserRouter([
       },
       {
         path: __ROUTE__.CONTACT.INDEX,
-        children: [{ index: true, Component: ContactPage }],
+        children: [
+          { index: true, Component: ContactPage },
+          { path: __ROUTE__.CONTACT.CREATE, Component: CreateContactPage },
+          { path: __ROUTE__.CONTACT.DETAIL, Component: DetailContactPage },
+        ],
       },
       {
         path: __ROUTE__.MEDIA.INDEX,
@@ -48,9 +52,20 @@ const router = createBrowserRouter([
       },
       {
         path: __ROUTE__.SLIDER.INDEX,
-        children: [{ index: true, Component: SliderPage }],
+        children: [
+          { index: true, Component: SliderPage },
+          { path: __ROUTE__.SLIDER.CREATE, Component: CreateSliderPage },
+          { path: __ROUTE__.SLIDER.DETAIL, Component: DetailSliderPage },
+        ],
       },
-      { path: __ROUTE__.SETTINGS, Component: SettingsPage },
+      {
+        path: __ROUTE__.COMPANY_INFO.INDEX,
+        children: [
+          { index: true, Component: CompanyInfoPage },
+          { path: __ROUTE__.COMPANY_INFO.CREATE, Component: CreateCompanyInfoPage },
+          { path: __ROUTE__.COMPANY_INFO.DETAIL, Component: DetailCompanyInfoPage },
+        ],
+      },
     ],
   },
 ])

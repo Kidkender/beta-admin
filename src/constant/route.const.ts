@@ -16,9 +16,9 @@ const __ROUTE__ = {
   },
 
   MEDIA: {
-    INDEX: '/user',
-    CREATE: '/user/create',
-    DETAIL: '/user/:id',
+    INDEX: '/media',
+    CREATE: '/media/create',
+    DETAIL: '/media/:id',
   },
 
   CONTACT: {
@@ -27,7 +27,11 @@ const __ROUTE__ = {
     DETAIL: '/contact/:id',
   },
 
-  SETTINGS: '/settings',
+  COMPANY_INFO: {
+    INDEX: '/company-info',
+    CREATE: '/company-info/create',
+    DETAIL: '/company-info/:id',
+  },
 
   AUTH: {
     INDEX: '/auth',

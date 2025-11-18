@@ -1,16 +1,17 @@
-export interface ResSlider {
+export interface ResCompanyInfo {
   id: number // 1
+  key: string // 'string'
   title: string // 'string'
-  link: string // 'string'
+  content: string // 'string'
   image: string // 'string'
   order: number // 0
   isActive: boolean // true
-  media: ResSliderMedia[]
+  media: ResCompanyInfoMedia[]
   createdAt: string // '2025-11-18T17:33:01.172Z'
   updatedAt: string // '2025-11-18T17:33:01.172Z'
 }
 
-export interface ResSliderMedia {
+export interface ResCompanyInfoMedia {
   id: number // 1
   fileName: string // 'land.png'
   url: string // 'http://localhost:3002/uploads/images/1762405362487-land.png'

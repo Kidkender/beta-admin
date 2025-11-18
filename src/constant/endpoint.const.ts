@@ -4,6 +4,11 @@ const __ENDPOINT__ = {
     LOGOUT: '/auth/logout',
   },
 
+  USER: {
+    INDEX: '/user',
+    ME: '/user/me',
+  },
+
   POST: {
     INDEX: '/posts',
   },
@@ -12,9 +17,14 @@ const __ENDPOINT__ = {
     INDEX: '/contact',
   },
 
+  COMPANY_INFO: {
+    INDEX: '/company-info',
+  },
+
   MEDIA: {
     INDEX: '/media',
     UPLOAD: '/media/upload',
+    UPLOAD_MULTI: '/media/upload-multiple',
   },
 
   SLIDER: {
