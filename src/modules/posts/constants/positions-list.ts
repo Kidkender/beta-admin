@@ -1,0 +1,50 @@
+export enum PositionEnum {
+  // HOMEPAGE
+  HOME_NEWS = 'HOME_NEWS',
+
+  // ABOUT
+  ABOUT_MILESTONE = 'ABOUT_MILESTONE',
+  ABOUT_ACHIEVEMENT = 'ABOUT_ACHIEVEMENT',
+
+  // BUSINESS
+  BUSINESS_BETA_GROUP_THEATER = 'BUSINESS_BETA_GROUP_THEATER',
+  BUSINESS_EXAMINER = 'BUSINESS_BETA_GROUP_EXAMINER',
+  BUSINESS_ARTIST_NEWS = 'BUSINESS_BETA_GROUP_NEWS',
+
+  // SERIES
+
+  // NEWS
+  NEWS_HOT = 'NEWS_HOT',
+  NEWS_BLOG_BUSINESS = 'NEWS_BLOG_BUSINESS',
+  NEWS_BLOG_ENTERTAINMENT = 'NEWS_BLOG_ENTERTAINMENT',
+  NEWS_BLOG_EVENT = 'NEWS_BLOG_EVENT',
+  NEWS_BLOG_BETA_GROUP = 'NEWS_BLOG_BETA_GROUP',
+}
+
+export const positionsListLabel = {
+  // HOMEPAGE
+  HOME_NEWS: 'Tin Tức Về Minh Beta',
+
+  // ABOUT
+  ABOUT_MILESTONE: 'Cột Mốc Đáng Nhớ',
+  ABOUT_ACHIEVEMENT: 'Thành Tựu Cá Nhân',
+
+  // BUSINESS
+  BUSINESS_BETA_GROUP_THEATER: 'Dự Án Rạp Nhượng',
+  BUSINESS_EXAMINER: 'Giám Khảo',
+  BUSINESS_ARTIST_NEWS: 'Nghệ Sĩ Tin Tức',
+
+  // SERIES
+
+  // NEWS
+  NEWS_HOT: 'Tin Tức Nổi Bật',
+  NEWS_BLOG_BUSINESS: 'Blog Kinh Doanh',
+  NEWS_BLOG_ENTERTAINMENT: 'Blog Giải Trí',
+  NEWS_BLOG_EVENT: 'Blog Sự Kiên',
+  NEWS_BLOG_BETA_GROUP: 'Blog Beta Group',
+}
+
+export const positionsList = Object.entries(PositionEnum).map(([key, value]) => ({
+  label: positionsListLabel[key],
+  value,
+}))
