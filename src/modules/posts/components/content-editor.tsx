@@ -19,9 +19,11 @@ import { Link, useNavigate } from 'react-router'
 import 'react-quill-new/dist/quill.snow.css'
 import { showToastError } from '@core/components/toast.core.tsx'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { positionsList } from '@modules/posts/constants/positions-list.ts'
 import { type ReqCreatePost, reqCreatePostSchema } from '@modules/posts/request/post.request.ts'
 import { useCreatePostMutation, useGetPostQuery, useUpdatePostMutation } from '@modules/posts/services/post.service.ts'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@shared/components/ui/form.tsx'
+import { MultiSelect } from '@shared/components/ui/multi-select.tsx'
 import { useLayoutEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -43,6 +45,7 @@ export default function ContentEditor({ postId }: ContentEditorProps) {
       thumbnail: '',
       published: false,
       files: [],
+      positions: [],
     },
   })
   const isEditing = !!postId
@@ -73,7 +76,7 @@ export default function ContentEditor({ postId }: ContentEditorProps) {
 
   useLayoutEffect(() => {
     if (isEditing && !isFetching) {
-      form.reset(data)
+      form.reset({ ...data, positions: data?.positions?.map((item) => item.position) ?? [] })
     }
   }, [data, form, isEditing, isFetching])
 
@@ -174,6 +177,25 @@ export default function ContentEditor({ postId }: ContentEditorProps) {
                 />
               </div>
             </div>
+
+            <FormField
+              control={form.control}
+              name='positions'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Vị Trí Xuất Hiện</FormLabel>
+                  <FormControl>
+                    <MultiSelect
+                      options={positionsList}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      placeholder='Chọn vị trí xuất hiện...'
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}

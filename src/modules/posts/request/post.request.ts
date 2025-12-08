@@ -7,6 +7,7 @@ export const reqQueryPostsSchema = schemaBaseQuery.extend({
   published: z.boolean().optional(),
   search: z.string().optional(),
   sortOrder: z.enum(['asc', 'desc']).optional(),
+  positions: z.array(z.string()).optional(), // ["HOME_MIDDLE", "NEWS_HERO", "MINH_SERIES"]
   sortBy: z.string().optional(),
 })
 
@@ -18,6 +19,7 @@ export const reqCreatePostSchema = z.object({
   category: z.string().min(1, { message: 'Vui lòng chọn danh mục' }),
   thumbnail: z.string().optional(),
   published: z.boolean().optional(),
+  positions: z.array(z.string()).optional(), // ["HOME_MIDDLE", "NEWS_HERO", "MINH_SERIES"]
   files: z.array(z.file()).optional(),
 })
 

@@ -10,9 +10,17 @@ export interface ResPost {
   publishedAt: string // null
   viewCount: number // 0
   media: ResPostMedia[]
+  positions: ResPostPosition[]
   author: ResPostAuthor
   createdAt: string // '2025-11-06T05:02:42.514Z'
   updatedAt: string // '2025-11-08T01:54:51.468Z'
+}
+
+export interface ResPostPosition {
+  id: number // 8
+  isActive: boolean // true
+  order: number //  0
+  position: string // 'HOME_NEWS'
 }
 
 export interface ResPostMedia {
