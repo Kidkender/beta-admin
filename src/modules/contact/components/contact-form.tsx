@@ -86,10 +86,10 @@ export default function ContactForm({ contactId }: ContentEditorProps) {
           </Button>
           <div>
             <h1 className='text-2xl font-bold text-foreground'>
-              {isEditing ? 'Chỉnh sửaliên hệthông tin' : 'Tạoliên hệthông tin mới'}
+              {isEditing ? 'Chỉnh sửa liên hệ thông tin' : 'Tạo liên hệ thông tin mới'}
             </h1>
             <p className='text-muted-foreground'>
-              {isEditing ? 'Cập nhật nội dungliên hệthông tin' : 'Tạo nội dung mới cho website'}
+              {isEditing ? 'Cập nhật nội dung liên hệthông tin' : 'Tạo nội dung mới cho website'}
             </p>
           </div>
         </div>

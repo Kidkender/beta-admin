@@ -30,6 +30,14 @@ import { Edit2, Search, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 
+const subjectListOption = {
+  PROJECT_COLLABORATION: 'Dự án/hợp tác',
+  BUSINESS_ADVICE: 'Lời khuyên kinh doanh',
+  COPYRIGHT: 'Xin bản quyền âm nhạc/ Phim',
+  JOB_OPPORTUNITY: 'Cơ hội việc làm',
+  OTHER: 'Vấn đề khác',
+}
+
 export default function ContactPage() {
   const [params, setParams] = useState<ReqQueryContact>({
     page: 1,
@@ -107,6 +115,35 @@ export default function ContactPage() {
                 </SelectGroup>
               </SelectContent>
             </Select>
+
+            <Select onValueChange={(value) => setParams((pre) => ({ ...pre, subject: value }))} value={params.subject}>
+              <SelectTrigger className='basis-1/8' size={'lg'}>
+                <SelectValue placeholder='Tiêu đề' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Tiêu đề</SelectLabel>
+                  <SelectItem className='text-primary' value={null}>
+                    Tất cả
+                  </SelectItem>
+                  <SelectItem className='text-primary' value='PROJECT_COLLABORATION'>
+                    Dự án/hợp tác
+                  </SelectItem>
+                  <SelectItem className='text-primary' value='BUSINESS_ADVICE'>
+                    Lời khuyên kinh doanh
+                  </SelectItem>
+                  <SelectItem className='text-primary' value='COPYRIGHT'>
+                    Xin bản quyền âm nhạc/ Phim
+                  </SelectItem>
+                  <SelectItem className='text-primary' value='JOB_OPPORTUNITY'>
+                    Cơ hội việc làm
+                  </SelectItem>
+                  <SelectItem className='text-primary' value='OTHER'>
+                    Vấn đề khác
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className='overflow-x-auto'>
@@ -149,7 +186,9 @@ export default function ContactPage() {
                       </TableCell>
                       <TableCell className=''>{contact.phone}</TableCell>
                       <TableCell className='text-muted-foreground'>{contact.email}</TableCell>
-                      <TableCell className='text-foreground'>{contact.subject}</TableCell>
+                      <TableCell className='text-foreground'>
+                        {contact?.subject ? subjectListOption[contact.subject] : subjectListOption['OTHER']}
+                      </TableCell>
                       <TableCell className='text-foreground'>{contact.message}</TableCell>
                       <TableCell>
                         <div className='flex items-center justify-end gap-2'>
