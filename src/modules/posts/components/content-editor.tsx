@@ -61,18 +61,29 @@ export default function ContentEditor({ postId }: ContentEditorProps) {
   const [updatePost] = useUpdatePostMutation()
 
   const onSubmit = (formData: ReqCreatePost) => {
+    const transformData = {
+      ...formData,
+      positions: formData.positions.map((item) => ({
+        position: item,
+        isActive: true,
+        order: 0,
+      })),
+    } as unknown as ReqCreatePost
+
     if (isEditing) {
-      updatePost({ id: postId, ...formData })
+      updatePost({ id: postId, ...transformData })
         .unwrap()
         .then(() => navigate(__ROUTE__.POSTS.INDEX))
         .catch(showToastError)
     } else {
-      createPost(formData)
+      createPost(transformData)
         .unwrap()
         .then(() => navigate(__ROUTE__.POSTS.INDEX))
         .catch(showToastError)
     }
   }
+
+  console.info({ positionsList, formValue: form.getValues('positions') })
 
   useLayoutEffect(() => {
     if (isEditing && !isFetching) {
@@ -181,20 +192,23 @@ export default function ContentEditor({ postId }: ContentEditorProps) {
             <FormField
               control={form.control}
               name='positions'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Vị Trí Xuất Hiện</FormLabel>
-                  <FormControl>
-                    <MultiSelect
-                      options={positionsList}
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      placeholder='Chọn vị trí xuất hiện...'
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Vị Trí Xuất Hiện</FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        options={positionsList}
+                        defaultValue={field.value}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        placeholder='Chọn vị trí xuất hiện...'
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
             />
 
             <FormField
